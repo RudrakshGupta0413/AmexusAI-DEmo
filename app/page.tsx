@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import PhoneInterface from "@/components/phone-interface"
+import { PhoneInterface } from "@/components/phone-interface"
 import { DataCleaningInterface } from "@/components/data-cleaning-interface"
 
 export default function Home() {
