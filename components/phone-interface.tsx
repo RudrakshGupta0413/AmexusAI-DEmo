@@ -11,6 +11,7 @@ interface Message {
 }
 
 const messages: Message[] = [
+  { text: "Client is speaking...", sender: "user", delay: 3000 },
   { text: "मैं एमेक्सस एआई की ओर से एक वेंडर सोर्सिंग एजेंट हूँ...", sender: "ai", delay: 2000 },
   { text: "Client is speaking...", sender: "user", delay: 3000 },
   { text: "मैं आपके क्षेत्र में उच्च गुणवत्ता वाले नट्स और बोल्ट्स के भरोसेमंद विक्रेता की तलाश कर रही हूँ।", sender: "ai", delay: 2500 },
