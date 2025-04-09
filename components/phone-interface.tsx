@@ -1,3 +1,5 @@
+"use client"
+
 import { useState, useEffect } from "react"
 import { Phone, PhoneOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -11,6 +13,7 @@ interface PhoneInterfaceProps {
 export function PhoneInterface({ onEndCall, isCallActive, agentType }: PhoneInterfaceProps) {
   const [timer, setTimer] = useState(0)
   const [callerNumber, setCallerNumber] = useState("")
+  const [speaker, setSpeaker] = useState("")
 
   // Generate a random phone number when the component mounts
   useEffect(() => {
@@ -44,19 +47,40 @@ export function PhoneInterface({ onEndCall, isCallActive, agentType }: PhoneInte
     return `${minutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`
   }
 
-  // Function to start the call and trigger the Python script
+  // Call start and listen to SSE from /api/call
   const onCall = async () => {
     try {
-      const response = await fetch("/api/call", { method: "POST" })
-      const data = await response.json()
-      console.log(data.message)
+      const eventSource = new EventSource("/api/call")
+
+      eventSource.onmessage = (event) => {
+        const message = event.data
+        console.log("Python message:", message)
+
+        if (message.startsWith("SPEAKER:")) {
+          setSpeaker(message.replace("SPEAKER:", "").trim())
+        }
+      }
+
+      eventSource.onerror = (error) => {
+        console.error("SSE error:", error)
+        eventSource.close()
+      }
+
+      // Set call as active externally if needed
     } catch (error) {
       console.error("Error starting call:", error)
     }
   }
 
   return (
-    <div className="mt-8 w-full max-w-xs mx-auto">
+    <div className="mt-8 w-full max-w-xs mx-auto relative">
+      {/* Floating Speaker Message */}
+      {speaker && (
+        <div className="absolute top-[-2.5rem] right-0 bg-white text-black px-4 py-2 rounded shadow text-sm font-semibold">
+          {speaker} is speaking...
+        </div>
+      )}
+
       <div className="bg-gray-900 rounded-xl overflow-hidden border border-gray-800 shadow-lg">
         {/* Phone display */}
         <div className="p-6 bg-gray-800 flex flex-col items-center">
