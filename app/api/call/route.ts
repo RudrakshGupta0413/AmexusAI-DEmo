@@ -3,8 +3,11 @@ import { spawn } from "child_process";
 import path from "path";
 
 export async function GET(req: NextRequest) {
-  const scriptPath = path.join(process.cwd(), "scripts", "voice_assistant", "main.py");
-  const pythonProcess = spawn("python3", [scriptPath]);
+  // Updated the spawn command
+  const pythonProcess = spawn("python3", ["-m", "voice_assistant.main"], {
+    cwd: path.join(process.cwd(), "scripts"),
+  });
+  
   const encoder = new TextEncoder();
   let isClosed = false;
 
